@@ -106,6 +106,7 @@ def validate_pairs(pairs: List[str]) -> None:
 
     try:
         markets = _API.markets
+        
     except requests.exceptions.RequestException as e:
         logger.warning('Unable to validate pairs (assuming they are correct). Reason: %s', e)
         return
@@ -114,7 +115,6 @@ def validate_pairs(pairs: List[str]) -> None:
     for pair in pairs:
         # Note: ccxt has BaseCurrency/QuoteCurrency format for pairs
         pair = pair.replace('_', '/')
-
         # TODO: add a support for having coins in BTC/USDT format
         if not pair.endswith(stake_cur):
             raise OperationalException(

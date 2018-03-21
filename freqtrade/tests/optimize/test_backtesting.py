@@ -45,8 +45,9 @@ def test_get_timeframe(default_strategy):
 
 def test_backtest(default_strategy, default_conf, mocker):
     mocker.patch.dict('freqtrade.main._CONF', default_conf)
-    exchange._API = exchange.init({'key': '', 'secret': ''})
-    data = optimize.load_data(None, ticker_interval=5, pairs=['BTC_ETH'])
+    exchange.init(default_conf)
+
+    data = optimize.load_data(None, ticker_interval=5, pairs=['ETH/BTC'])
     data = trim_dictlist(data, -200)
     results = backtest({'stake_amount': default_conf['stake_amount'],
                         'processed': optimize.preprocess(data),
@@ -57,7 +58,7 @@ def test_backtest(default_strategy, default_conf, mocker):
 
 def test_backtest_1min_ticker_interval(default_strategy, default_conf, mocker):
     mocker.patch.dict('freqtrade.main._CONF', default_conf)
-    exchange._API = exchange.init({'key': '', 'secret': ''})
+    exchange.init(default_conf)
 
     # Run a backtesting for an exiting 5min ticker_interval
     data = optimize.load_data(None, ticker_interval=1, pairs=['BTC_UNITEST'])

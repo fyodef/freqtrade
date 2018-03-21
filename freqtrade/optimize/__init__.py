@@ -35,7 +35,7 @@ def load_tickerdata_file(datadir, pair, ticker_interval, timerange=None):
     path = make_testdata_path(datadir)
     file = '{abspath}/{pair}-{ticker_interval}.json'.format(
         abspath=path,
-        pair=pair,
+        pair=pair.replace('/', '_'),
         ticker_interval=ticker_interval,
     )
     gzipfile = file + '.gz'
@@ -135,7 +135,7 @@ def download_backtesting_testdata(datadir: str, pair: str, interval: int = 5) ->
         interval=interval,
     ))
 
-    filepair = pair.replace("-", "_")
+    filepair = pair.replace("/", "_")
     filename = os.path.join(path, '{pair}-{interval}.json'.format(
         pair=filepair,
         interval=interval,
@@ -152,12 +152,16 @@ def download_backtesting_testdata(datadir: str, pair: str, interval: int = 5) ->
         logger.debug("Current End: None")
 
     new_data = get_ticker_history(pair=pair, tick_interval=int(interval))
+    
     for row in new_data:
         if row not in data:
             data.append(row)
-    logger.debug("New Start: {}".format(data[1]['T']))
-    logger.debug("New End: {}".format(data[-1:][0]['T']))
-    data = sorted(data, key=lambda data: data['T'])
+    from pandas import to_datetime
+    
+    data[1]
+    logger.debug("New Start: {}".format(data[1][0]))
+    logger.debug("New End: {}".format(data[-1:][0][0]))
+    data = sorted(data, key=lambda data: data[0])
 
     misc.file_dump_json(filename, data)
 
