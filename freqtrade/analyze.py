@@ -35,7 +35,7 @@ class Analyze(object):
         self.logger = Logger(name=__name__, level=config.get('loglevel')).get_logger()
 
         self.config = config
-        self.strategy = StrategyResolver(self.config)
+        self.strategy = StrategyResolver(self.config).strategy
 
     @staticmethod
     def parse_ticker_dataframe(ticker: list) -> DataFrame:
